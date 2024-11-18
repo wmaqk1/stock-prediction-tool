@@ -1,3 +1,4 @@
+
 def add_returns(data_frame, period, label):
     '''Add return column for a specified time period.'''
     data_frame[f'{label}_return'] = data_frame['Adj Close'] - data_frame['Adj Close'].shift(period)
@@ -46,31 +47,34 @@ def macd_implementation(data_frame):
 
 def data_analysis(df):
     """Add additional technical indicators do data frame."""
-    periods = {
-    'daily': 1,
-    'weekly': 5,
-    'monthly': 21,
-    }
-    for label, period in periods.items():
-        df = add_returns(df, period, label)
+    try:
+        periods = {
+        'daily': 1,
+        'weekly': 5,
+        'monthly': 21,
+        }
+        for label, period in periods.items():
+            df = add_returns(df, period, label)
 
-    df = add_rolling_statistic(df, 'Adj Close')
+        df = add_rolling_statistic(df, 'Adj Close')
 
-    df = daily_open_close_diff(df)
+        df = daily_open_close_diff(df)
 
-    df = daily_high_low_diff(df)
+        df = daily_high_low_diff(df)
 
-    df = rsi_implementation(df, 14)
+        df = rsi_implementation(df, 14)
 
-    df = macd_implementation(df)
+        df = macd_implementation(df)
 
-    df['day_of_week'] = df.index.dayofweek
+        df['day_of_week'] = df.index.dayofweek
 
-    df['month'] = df.index.month
+        df['month'] = df.index.month
 
-    df= create_lagged_features(df)
+        df= create_lagged_features(df)
 
-    # Currently there is no acces to future predictions due to dropna usage
-    df['test'] = df['Close'].shift(-21)
-    df = df.dropna()
-    return df
+        # Currently there is no acces to future predictions due to dropna usage
+        df['test'] = df['Close'].shift(-21)
+        df = df.dropna()
+        return df
+    except Exception as e:
+        return e
