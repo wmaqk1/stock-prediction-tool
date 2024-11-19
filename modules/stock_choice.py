@@ -5,24 +5,54 @@ import pandas as pd
 import yfinance
 
 def ten_most_promising_stocks(data):
-
+    """
+    Uses implemented ML model for predicting stock prices and based 
+    on their values and uncertainty chooses 10 most promising stocks 
+    in terms of profit.
+    """
     df = pd.DataFrame({
         'symbol': [],
         'predicted_price': [],
         'current_price' :[],
         'price_diff': [],
         'actual_diff': [],
-        'avarage_diff': []
+        'avarage_diff_squared': []
     })
     for stock in data:
         try:
+            # Analyze the stock data
             stock_with_added_features = data_analysis(stock)
-            predicted_price, current_price, actual_price, diff= predict_prices(stock_with_added_features)
-            df.loc[len(df)] = [stock['Symbol'][0], predicted_price, current_price, predicted_price - current_price, actual_price - current_price, diff]
+            # Predict prices
+            predicted_price, current_price, actual_price, diff = predict_prices(stock_with_added_features)
+            
+            # Ensure the stock has a valid symbol
+            symbol = stock.get('Symbol', [None])[0]
+            if symbol:
+                # Add results to the DataFrame
+                df.loc[len(df)] = [
+                    symbol,
+                    predicted_price,
+                    current_price,
+                    predicted_price - current_price,
+                    actual_price - current_price,
+                    diff
+                ]
+            else:
+                print("Error: No valid symbol found for the stock.")
         except Exception as e:
-            print(f"Error during processing stock {stock['Symbol'][0]}: {e}")
-            continue
-        
-    df = df[df["price_diff"] > 0]
-    print(df)
+            print(f"Error processing stock: {str(e)}")
+ 
+    try:
+        # Filter rows where the 'price_diff' column is greater than 0 and squared_diff < 2 
+        df = df[df['price_diff'] > 0]
+        df = df[df['avarage_diff_squared'] < 2.0]
+        # Retain only the top 10 rows based on the sorted DataFrame
+        df.sort_values(by='price_diff', ascending=False)
+        df = df[:10]
+        print(df)
+    except Exception as e:
+        print(f"Lack of promising stocks: {e}")
+        return None
+
+ten_most_promising_stocks(import_stock())
     

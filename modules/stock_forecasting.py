@@ -63,5 +63,4 @@ def Machine_learning_price_prediction(df):
         # Calculate metrics
         diff.append(abs(y_val - y_pred) ** 2)
     
-
-    return y_pred[-1], X['Close'][-1], y[-1], np.average(diff)
+    return y_pred[-1], X['Close'].iloc[-1], y[-1], np.average(diff)
