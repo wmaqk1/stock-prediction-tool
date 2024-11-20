@@ -1,5 +1,5 @@
 import xapi
-import asyncio
+import time
 
 # function to buy stock 
 async def Buy_Stock(login_data, stock, quantity):
@@ -42,7 +42,7 @@ async def Sell_Stock(login_data, stock, quantity):
         print(f"Connection closed: {c}")
         return False
 
-# function to return information about certain stock and None if not existing
+# function to return informations about certain stock and None if not existing
 async def Stock_Enquiry(login_data, stock):
     try:
         async with await xapi.connect(**login_data) as login:
@@ -68,6 +68,40 @@ async def Clear_Portfolio(login_data):
             for element in portfolio_data['returnData']:
                 if await Sell_Stock(login_data, element['symbol'], element['volume']) == False:
                     print(f"Selling {element['symbol']} stock failed")
+
+    except xapi.LoginFailed as e:
+        print(f"Log in failed: {e}")
+        return None
+    except xapi.ConnectionClosed as c:
+        print(f"Connection closed: {c}")
+        return None
+
+# Function to get information about current credit
+async def Credit(login_data):
+    try:
+        async with await xapi.connect(**login_data) as login:
+            await login.stream.getBalance()
+            
+            async for message in login.stream.listen():
+                credit = message['data']['marginFree']
+                await login.stream.stopBalance()
+                return credit
+
+    except xapi.LoginFailed as e:
+        print(f"Log in failed: {e}")
+        return False
+    except xapi.ConnectionClosed as c:
+        print(f"Connection closed: {c}")
+        return False
+
+# Minimum purchase amount
+async def Minimum_purchase(login_data, stock_name):
+    try:
+        async with await xapi.connect(**login_data) as login:
+            stock = await login.socket.getTickPrices(stock_name, int(time.time()))
+
+        if stock['status']:
+            return stock['returnData']['quotations'][0]['ask']
 
     except xapi.LoginFailed as e:
         print(f"Log in failed: {e}")
