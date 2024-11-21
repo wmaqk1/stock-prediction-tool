@@ -1,8 +1,7 @@
-from stock_forecasting import Machine_learning_price_prediction as predict_prices
-from returns_data import data_analysis
-from stock_data_import import import_stock_history as import_stock
+from modules.stock_forecasting import Machine_learning_price_prediction as predict_prices
+from modules.returns_data import data_analysis
+from modules.stock_data_import import import_stock_history as import_stock
 import pandas as pd
-import yfinance
 
 def ten_most_promising_stocks(data):
     """
@@ -45,14 +44,12 @@ def ten_most_promising_stocks(data):
     try:
         # Filter rows where the 'price_diff' column is greater than 0 and squared_diff < 2 
         df = df[df['price_diff'] > 0]
-        df = df[df['avarage_diff_squared'] < 2.0]
+        df = df[df['avarage_diff_squared'] < 5]
+        df['profit_to_value'] = df['price_diff'] / df['current_price']
         # Retain only the top 10 rows based on the sorted DataFrame
-        df.sort_values(by='price_diff', ascending=False)
+        df = df.sort_values(by='profit_to_value', ascending=False)
         df = df[:10]
-        print(df)
+        return df
     except Exception as e:
         print(f"Lack of promising stocks: {e}")
         return None
-
-ten_most_promising_stocks(import_stock())
-    
