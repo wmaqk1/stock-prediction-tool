@@ -12,7 +12,7 @@ def import_table():
 def import_stock_history():
     stock_list = import_table()
     data = []
-    for index, stock in stock_list[:150].iterrows():
+    for index, stock in stock_list.iterrows():
         result = yfinance.download(stock['Symbol'], period='10y')
         result['Symbol'] = stock['Symbol']
         data.append(result)

@@ -21,7 +21,7 @@ def main():
     for index, row in df.iterrows():
         potential_result += row['price_diff'] * row['quantity'] * row['exchange_rate']
         actual_result += row['actual_diff'] * row['quantity'] * row['exchange_rate']
-        print(potential_result, actual_result, unused_credit)
+    print(potential_result, actual_result, unused_credit)
     
 main()
 

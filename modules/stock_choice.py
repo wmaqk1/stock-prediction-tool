@@ -44,7 +44,7 @@ def ten_most_promising_stocks(data):
     try:
         # Filter rows where the 'price_diff' column is greater than 0 and squared_diff < 2 
         df = df[df['price_diff'] > 0]
-        df = df[df['avarage_diff_squared'] < 5]
+        df = df[df['avarage_diff_squared'] < 2]
         df['profit_to_value'] = df['price_diff'] / df['current_price']
         # Retain only the top 10 rows based on the sorted DataFrame
         df = df.sort_values(by='profit_to_value', ascending=False)
@@ -53,3 +53,4 @@ def ten_most_promising_stocks(data):
     except Exception as e:
         print(f"Lack of promising stocks: {e}")
         return None
+
