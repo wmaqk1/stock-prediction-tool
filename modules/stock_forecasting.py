@@ -28,7 +28,7 @@ def kfold_series(data, n_splits, prediction_window):
 def Machine_learning_price_prediction(df):
     """
     Makes price predictions using machine learning.
-    Returns tuple containing the predicted price and average squared difference
+    Returns tuple containing the predicted price, current price and average squared difference
     """
     # Scaler initialisation
     scaler = StandardScaler()
@@ -38,10 +38,12 @@ def Machine_learning_price_prediction(df):
         'rolling_mean_21_days', 'rolling_std_21_days', 'rolling_median_21_days', 'rsi', 'Signal_Line']]
 
     # Standardize features  
-    X_standardized = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+    X_standardized_original = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
+    # Values for testing
+    X_standardized = X_standardized_original[:-21]
 
      # Select target variable
-    y = df[['test']].values.ravel()
+    y = df[['test']][:-21].values.ravel()
 
     # Create model
     model = XGBRegressor(n_estimators=500, learning_rate=0.05, max_depth=6, subsample=0.8, colsample_bytree=0.8)
@@ -63,4 +65,7 @@ def Machine_learning_price_prediction(df):
         # Calculate metrics
         diff.append(abs(y_val - y_pred) ** 2)
     
-    return y_pred[-1], X['Close'].iloc[-1], y[-1], np.average(diff)
+    final_pred = model.predict(X_standardized_original.iloc[-1].values.reshape(1, -1))
+    correction_factor = 1.05
+    
+    return final_pred[-1]*correction_factor, X['Close'].iloc[-1], np.average(diff)
