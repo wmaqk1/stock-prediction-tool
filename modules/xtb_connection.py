@@ -50,7 +50,7 @@ async def Stock_Enquiry(login_data, stock):
 
             for element in portfolio_data['returnData']:
                 if element['symbol'] == stock:
-                    return element
+                    return element['volume']
         
     except xapi.LoginFailed as e:
         print(f"Log in failed: {e}")

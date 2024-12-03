@@ -22,7 +22,7 @@ def ten_most_promising_stocks(data):
             # Analyze the stock data
             stock_with_added_features = data_analysis(stock)
             # Predict prices
-            predicted_price, current_price, actual_price, diff = predict_prices(stock_with_added_features)
+            predicted_price, current_price, diff = predict_prices(stock_with_added_features)
             
             # Ensure the stock has a valid symbol
             symbol = stock.get('Symbol', [None])[0]
@@ -33,7 +33,6 @@ def ten_most_promising_stocks(data):
                     predicted_price,
                     current_price,
                     predicted_price - current_price,
-                    actual_price - current_price,
                     diff
                 ]
             else:
