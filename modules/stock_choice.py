@@ -14,7 +14,6 @@ def ten_most_promising_stocks(data):
         'predicted_price': [],
         'current_price' :[],
         'price_diff': [],
-        'actual_diff': [],
         'avarage_diff_squared': []
     })
     for stock in data:
