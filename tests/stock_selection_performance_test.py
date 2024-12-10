@@ -10,7 +10,7 @@ from modules.deciding_on_stock_quantity import stock_partition_in_portfolio
 from modules.stock_data_import import import_stock_history
 
 
-def performance_test(login_data, intervals=4, output_file='selection_results.txt'):
+def performance_test(login_data, intervals=8, output_file='selection_results.txt'):
     """
     Verify the accuracy of stock filtration and selection of the most profitable 
     ones made by the stock_choice module and deciding_on_stock_quantity.
@@ -20,7 +20,7 @@ def performance_test(login_data, intervals=4, output_file='selection_results.txt
     data = [stock[:-21] for stock in data_original]
 
     # Approximate trading days
-    length = 21
+    length = 50
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write("Stock Prediction Test Results\n")
