@@ -20,15 +20,15 @@ def performance_test(login_data, intervals=4, output_file='selection_results.txt
     data = [stock[:-21] for stock in data_original]
 
     # Approximate trading days
-    half_year_length = 120
+    length = 21
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write("Stock Prediction Test Results\n")
 
         for run in range(intervals):
             
-            data_original = [stock[:-(half_year_length * run + 1)] for stock in data_original]
-            data = [stock[:-(half_year_length * run + 1)] for stock in data]
+            data_original = [stock[:-(length * run + 1)] for stock in data_original]
+            data = [stock[:-(length * run + 1)] for stock in data]
             
             predicted_profit = 0
             actual_profit = 0
