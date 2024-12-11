@@ -2,27 +2,19 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import pandas as pd
 from xgboost import XGBRegressor
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.metrics import mean_squared_error
 
-def kfold_series(data, n_splits, prediction_window):
+def create_folds(X, n_splits):
     """
-    Splits data into training and testing sets using k-fold cross-validation.
-    Returns list of tuples containing the start and end indices of each fold.
+    Splits data into training and testing sets using time series split.
     """
-    try:
-        n_samples = len(data)
-        if n_samples - n_splits * prediction_window < 50 * n_splits:
-            raise ValueError("Not enough data for processing")
-        one_period = (n_samples - n_splits * prediction_window) // n_splits
+    tscv = TimeSeriesSplit(n_splits=n_splits)
+    folds = []
 
-        folds = []
-        for i in range(n_splits):
-            start = i * one_period
-            end = start + one_period
-            
-            folds.append((end, end + prediction_window))       
-        return folds
-    except Exception as e:
-        return e
+    for train_index, val_index in tscv.split(X):
+        folds.append((train_index, val_index))
+    return folds
 
 
 def Machine_learning_price_prediction(df):
@@ -46,15 +38,21 @@ def Machine_learning_price_prediction(df):
     y = df[['test']][:-21].values.ravel()
 
     # Create model
-    model = XGBRegressor(n_estimators=500, learning_rate=0.05, max_depth=6, subsample=0.8, colsample_bytree=0.8)
+    model = XGBRegressor(
+        n_estimators=500, 
+        learning_rate=0.05, 
+        max_depth=6, 
+        subsample=0.8, 
+        colsample_bytree=0.8
+    )
 
     # Split data into training and testing sets
-    data_sets = kfold_series(X_standardized, n_splits=10, prediction_window=1)
+    data_sets = create_folds(X_standardized, n_splits=10)
     diff = []
     
     for train_index, val_index in data_sets:
-        X_train, X_val = X_standardized.iloc[:train_index], X_standardized.iloc[train_index:val_index]
-        y_train, y_val = y[:train_index], y[train_index:val_index]
+        X_train, X_val = X_standardized.iloc[train_index], X_standardized.iloc[val_index]
+        y_train, y_val = y[train_index], y[val_index]
 
         # Train model
         model.fit(X_train, y_train)
@@ -63,11 +61,11 @@ def Machine_learning_price_prediction(df):
         y_pred = model.predict(X_val)
 
         # Calculate metrics
-        diff.append(abs(y_val - y_pred) ** 2)
+        diff.append(mean_squared_error(y_val, y_pred))
     
-    final_pred = model.predict(X_standardized_original.iloc[-1].values.reshape(1, -1))
+    final_pred = model.predict(X_standardized_original.iloc[-1:].values)
     
-    # Adjusting predicted value due to undervaluation
-    adjustment_factor = 1.00
+    current_price = X['Close'].iloc[-1]
+    average_diff = np.mean(diff)
     
-    return final_pred[-1]*adjustment_factor, X['Close'].iloc[-1], np.average(diff)
+    return final_pred[0], current_price, average_diff
