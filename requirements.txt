@@ -1,0 +1,9 @@
+asyncio
+pandas
+numpy
+scikit-learn
+xgboost
+yfinance
+xapi-python
+scipy
+

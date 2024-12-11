@@ -1,6 +1,5 @@
 from modules.stock_forecasting import Machine_learning_price_prediction as predict_prices
 from modules.returns_data import data_analysis
-from modules.stock_data_import import import_stock_history as import_stock
 import pandas as pd
 
 def ten_most_promising_stocks(data):

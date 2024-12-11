@@ -66,6 +66,8 @@ def Machine_learning_price_prediction(df):
         diff.append(abs(y_val - y_pred) ** 2)
     
     final_pred = model.predict(X_standardized_original.iloc[-1].values.reshape(1, -1))
-    correction_factor = 1.05
     
-    return final_pred[-1]*correction_factor, X['Close'].iloc[-1], np.average(diff)
+    # Adjusting predicted value due to undervaluation
+    adjustment_factor = 1.00
+    
+    return final_pred[-1]*adjustment_factor, X['Close'].iloc[-1], np.average(diff)
