@@ -19,11 +19,11 @@ def stock_partition_in_portfolio(df, login_data):
 
         # Function to get the minimum purchase amount and suffix for each stock
         def get_minimum_purchase(row, login_data):
-            price_usd = asyncio.run(Minimum_purchase(login_data, f"{row[0]}.US_9"))
+            price_usd = asyncio.run(Minimum_purchase(login_data, f"{row.iloc[0]}.US_9"))
             sufix = '.US_9'
 
             if price_usd is None:
-                price_usd = asyncio.run(Minimum_purchase(login_data, f"{row[0]}.US"))
+                price_usd = asyncio.run(Minimum_purchase(login_data, f"{row.iloc[0]}.US"))
                 sufix = '.US'
 
             if price_usd is None:
