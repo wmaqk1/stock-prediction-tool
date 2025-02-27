@@ -1,4 +1,6 @@
 import asyncio
+import os
+from dotenv import load_dotenv
 from modules.stock_forecasting import Machine_learning_price_prediction
 from modules.returns_data import data_analysis
 from modules.deciding_on_stock_quantity import stock_partition_in_portfolio as stock_partition
@@ -6,21 +8,21 @@ from modules.stock_choice import ten_most_promising_stocks
 from modules.stock_data_import import import_stock_history
 from modules.xtb_connection import Buy_Stock, Clear_Portfolio
 
-
 def main():
     """
     Main function to execute the stock trading process
     """
 
     # Login data for the XTB API
+    load_dotenv()
     login_data = {
-        "accountId": "17069237",
-        "password": "D4$*2Tx*FHt!4Y#",
-        "host": "ws.xtb.com",
-        "type": "demo",
-        "safe": "True",
+        "accountId": os.getenv("ACCOUNT_ID"),
+        "password": os.getenv("PASSWORD"),
+        "host": os.getenv("HOST"),
+        "type": os.getenv("TYPE"),
+        "safe": os.getenv("SAFE") == "True"
     }
-
+    
     # Import historical stock data
     stock_history = import_stock_history()
 

@@ -1,5 +1,6 @@
 import sys
 import os
+from dotenv import load_dotenv
 
 # Add parent directory to the path for module imports
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -98,12 +99,15 @@ def find_value(data, stock_name):
     raise ValueError(f"Stock {stock_name} not found in the data.")
 
 
-login_data = {
-    "accountId": "17069237",
-    "password": "D4$*2Tx*FHt!4Y#",
-    "host": "ws.xtb.com",
-    "type": "demo",
-    "safe": "True",
-}
 
-performance_test(login_data)
+if __name__ == "__main__":
+    
+    load_dotenv()
+    login_data = {
+        "accountId": os.getenv("ACCOUNT_ID"),
+        "password": os.getenv("PASSWORD"),
+        "host": os.getenv("HOST"),
+        "type": os.getenv("TYPE"),
+        "safe": os.getenv("SAFE") == "True"
+    }
+    performance_test(login_data)
