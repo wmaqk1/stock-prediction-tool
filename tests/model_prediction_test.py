@@ -10,14 +10,10 @@ from modules.returns_data import data_analysis
 from modules.stock_forecasting import Machine_learning_price_prediction
 from modules.stock_data_import import import_stock_history
 
-def prediction_test(intervals=4, output_file='prediction_results.txt'):
+def prediction_test(intervals=1, output_file='prediction_results.txt'):
     """
     Verify the accuracy of price increase and decrease predictions made 
     by the stock_forecasting module for individual stocks.
-    
-    Args:
-        intervals (int): Number of intervals to evaluate predictions over.
-        output_file (str): File name for storing prediction results.
     """
     # Import stock data history
     data = import_stock_history()

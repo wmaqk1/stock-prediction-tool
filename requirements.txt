@@ -6,4 +6,5 @@ xgboost
 yfinance
 xapi-python
 scipy
+dotenv
 

@@ -84,7 +84,7 @@ def data_analysis(df):
         df = create_lagged_features(df)
 
         # Remove rows with missing data and add a shifted test column
-        df = df.dropna()
+        df = df.dropna().copy()
         df['test'] = df['Close'].shift(-21)
 
         return df
