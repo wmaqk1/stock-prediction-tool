@@ -48,6 +48,17 @@ Adds additional derived features to improve model insights:
   Connects with XTB trading API for real-time stock trading and market data retrieval.
 
 ---
+## Configuration of the `.env` File
+
+To securely store authentication credentials, create a `.env` file in the root directory of the project. This file should contain data in the following format:
+
+```plaintext
+ACCOUNT_ID=17069237
+PASSWORD=D4$*2Tx*FHt!4Y#
+HOST=ws.xtb.com
+TYPE=demo
+SAFE=True
+```
 
 ### Test Overview
 
