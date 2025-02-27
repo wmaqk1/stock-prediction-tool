@@ -53,14 +53,25 @@ Adds additional derived features to improve model insights:
 To securely store authentication credentials, create a `.env` file in the root directory of the project. This file should contain data in the following format:
 
 ```plaintext
-ACCOUNT_ID=17069237
-PASSWORD=D4$*2Tx*FHt!4Y#
+ACCOUNT_ID=********
+PASSWORD=*********
 HOST=ws.xtb.com
 TYPE=demo
 SAFE=True
 ```
+---
 
-### Test Overview
+## Installing Required Libraries
+
+To install all necessary libraries, run the `requirements.txt` file using the following command:
+
+```bash
+!pip install -r requirements.txt
+```
+
+---
+
+## Test Overview
 
 The provided scripts include two main testing functions designed to assess the system's prediction accuracy and decision-making effectiveness:
 
