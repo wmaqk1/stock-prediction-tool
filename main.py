@@ -14,7 +14,7 @@ def main():
     """
 
     # Login data for the XTB API
-    load_dotenv()
+    load_dotenv("login_data.env")
     login_data = {
         "accountId": os.getenv("ACCOUNT_ID"),
         "password": os.getenv("PASSWORD"),
@@ -28,16 +28,17 @@ def main():
 
     # Select the ten most promising stocks
     picked_stocks = ten_most_promising_stocks(stock_history)
-
+    print(picked_stocks)
     # Allocate credit among selected stocks
     df, unused_credit = stock_partition(picked_stocks, login_data)
 
     # Clear the current portfolio
     Clear_Portfolio(login_data)
+    df = df.dropna()
 
     # Purchase stocks
     for _, row in df.iterrows():
-        stock_name = row['symbol'] + row[-3]  # Combine stock symbol and suffix
+        stock_name = row['symbol'] + row['sufix']  # Combine stock symbol and suffix
         quantity = row[-2]  # Extract quantity to buy
         result = asyncio.run(Buy_Stock(login_data, stock_name, quantity))
         if not result:

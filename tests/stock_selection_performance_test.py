@@ -1,6 +1,5 @@
 import sys
 import os
-from dotenv import load_dotenv
 
 # Add parent directory to the path for module imports
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -9,6 +8,7 @@ sys.path.append(parent_dir)
 from modules.stock_choice import ten_most_promising_stocks
 from modules.deciding_on_stock_quantity import stock_partition_in_portfolio
 from modules.stock_data_import import import_stock_history
+from dotenv import load_dotenv
 
 
 def performance_test(login_data, intervals=8, output_file='selection_results.txt'):
@@ -101,8 +101,8 @@ def find_value(data, stock_name):
 
 
 if __name__ == "__main__":
-    
-    load_dotenv()
+    env_path = os.path.join(parent_dir, "login_data.env")
+    load_dotenv(env_path)
     login_data = {
         "accountId": os.getenv("ACCOUNT_ID"),
         "password": os.getenv("PASSWORD"),
