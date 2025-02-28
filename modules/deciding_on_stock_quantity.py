@@ -10,7 +10,6 @@ def stock_partition_in_portfolio(df, login_data):
     errors, compute the number of each stock to buy. Returns the 
     filled DataFrame and a number representing unused credit.
     """
-
     try:
         # Add a spread to the USD to PLN conversion rate
         spread = 0.02
@@ -28,7 +27,7 @@ def stock_partition_in_portfolio(df, login_data):
 
             if price_usd is None:
                 sufix = None
-                return None, sufix
+                return float('inf'), sufix
 
             return round(price_usd * exchange_rate, 4), sufix
 

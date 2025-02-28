@@ -1,7 +1,7 @@
 def add_returns(data_frame, period, label):
     """Add return column for a specified time period."""
     data_frame[f'{label}_return'] = (
-        data_frame['Adj Close'] - data_frame['Adj Close'].shift(period)
+        data_frame['Close'] - data_frame['Close'].shift(period)
     )
     return data_frame
 
@@ -66,7 +66,7 @@ def data_analysis(df):
             df = add_returns(df, period, label)
 
         # Add rolling statistics
-        df = add_rolling_statistic(df, 'Adj Close')
+        df = add_rolling_statistic(df, 'Close')
 
         # Add daily differences
         df = daily_open_close_diff(df)

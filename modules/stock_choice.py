@@ -35,10 +35,10 @@ def ten_most_promising_stocks(data):
                 ]
             else:
                 print("Error: No valid symbol found for the stock.")
+
         except Exception as e:
             print(f"Error processing stock: {str(e)}")
             pass
- 
     try:
         # Filter rows where the 'price_diff' column is greater than 0 and squared_diff < 2 
         df = df[df['price_diff'] > 0]
